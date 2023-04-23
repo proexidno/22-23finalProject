@@ -1,25 +1,21 @@
 "use client";
 import React, { useRef } from 'react'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react';
 
 function SignIn() {
     const login = useRef('')
     const password = useRef('')
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault()
 
-        const data = {
+        let response = await signIn("credentials", {
             login: login.current,
             password: password.current,
-        }
-
-        let response = fetch("http://localhost:3000/api/auth/login", {
-            "method": 'POST',
-            "cache": 'no-store',
-            "body": JSON.stringify(data),
+            redirect: true,
+            callbackUrl: "/",
         })
-        console.log(response);
     }
 
     return (

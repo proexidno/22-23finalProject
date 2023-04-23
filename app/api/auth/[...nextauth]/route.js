@@ -1,8 +1,5 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { NextResponse } from "next/server";
-
-const loginC = "admin123", passwordC = "1234"
 
 export const authOptions = {
     providers: [
@@ -21,10 +18,9 @@ export const authOptions = {
                     "body": JSON.stringify({ login, password }),
                     headers: { "Content-Type": "application/json" },
                 })
-                
+
                 const user = await res.json()
-                console.log(user);
-                
+
                 if (res.ok && user && !user.error) {
                     return user
                 } else {
@@ -48,6 +44,9 @@ export const authOptions = {
             return token;
         },
     },
+    pages: {
+        signIn: '/auth/signin',
+    }
 }
 
 const handler = NextAuth(authOptions)
