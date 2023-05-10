@@ -12,7 +12,7 @@ export default async function CheckIfUserValid(login, password) {
     if (!isInDB.password === password) {
         return NextResponse.json({ error: "Wrong credentials"});
     }
-    const res = db.prepare(`SELECT u.login, offs.level, offs.progression, offs.max_progression, onns.rating FROM Users as u 
+    const res = db.prepare(`SELECT u.id, u.login, offs.level, offs.progression, offs.max_progression, onns.rating FROM Users as u 
     LEFT JOIN Offline_Statistics as offs ON u.id = offs.user_id
     LEFT JOIN Online_Statistics as onns ON u.id = onns.user_id
     WHERE login = ?`).get(login)

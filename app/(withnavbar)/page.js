@@ -3,9 +3,10 @@
 import { useSession } from "next-auth/react"
 
 export default function Home() {
+  
   const { data: session } = useSession()
   const user = session?.user;
-  console.log(user);
+
   return (
     <>
       <div className="grid md:grid-rows-1 md:grid-cols-3 grid-rows-3 grid-cols-1 border-8 rounded-xl border-gray-300 overflow-hidden">

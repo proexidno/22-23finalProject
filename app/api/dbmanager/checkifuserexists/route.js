@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import CheckIfUserValid from "@/model/checkifuservalid";
+import CheckIfUserValid from "model/checkifuservalid";
 
 export async function POST(req) {
     const { login, password } = await req.json()

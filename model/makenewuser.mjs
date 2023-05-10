@@ -1,5 +1,4 @@
 import Database from "better-sqlite3";
-import { NextResponse } from "next/server";
 
 export default function registerNewUser(login, password, email) {
 
@@ -9,7 +8,7 @@ export default function registerNewUser(login, password, email) {
         try {
                 db.prepare(`INSERT INTO Users (id, login, email, password) Values ((?), (?), (?), (?))`).run(newId, login, password, email)
         } catch (SqliteError) {
-                if (SqliteError.code === SQLITE_CONSTRAINT_UNIQUE) return NextResponse.json({ ok: false, error: "User already exists" })
+                if (SqliteError.code === SQLITE_CONSTRAINT_UNIQUE) return { ok: false, error: "User already exists" }
         }
 
         db.prepare(`INSERT INTO Online_Statistics (id, user_id) Values ((?), (?))`).run(newId, newId)
@@ -18,5 +17,5 @@ export default function registerNewUser(login, password, email) {
 
         db.close()
 
-        return NextResponse.json({ ok: true })
+        return { ok: true }
 }
