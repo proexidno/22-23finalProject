@@ -2,15 +2,18 @@
 import React, { useRef } from 'react'
 import Link from 'next/link'
 import { signIn } from 'next-auth/react';
+import { useToast } from "components/ui/use-toast"
 
-function SignIn() {
+export default function SignIn() {
+
     const login = useRef('')
     const password = useRef('')
+    const { toast } = useToast()
 
     async function handleSubmit(event) {
         event.preventDefault()
 
-        let response = await signIn("credentials", {
+        await signIn("credentials", {
             login: login.current,
             password: password.current,
             redirect: true,
@@ -68,5 +71,3 @@ function SignIn() {
         </div>
     )
 }
-
-export default SignIn

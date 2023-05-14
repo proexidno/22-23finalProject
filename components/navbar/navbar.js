@@ -13,7 +13,7 @@ export default function Navbar() {
             <div className="flex justify-center gap-8 md:gap-4 lg:gap-8 leading-loose sm:text-3xl md:text-2xl font-semibold lg:text-3xl xl:text-4xl">
                 <Link className="hover:bg-slate-200 hover:rounded-3xl px-4 leading-loose" href="/">Home</Link>
                 <Documentation />
-                <Link className="hover:bg-slate-200 hover:rounded-3xl px-4 leading-loose" href="/games/offline" >Games</Link>
+                <Link className="hover:bg-slate-200 hover:rounded-3xl px-4 leading-loose" href="/games" >Games</Link>
             </div>
             <Avatar />
         </header>

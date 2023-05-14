@@ -28,7 +28,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "components/ui/toaster.js"  ],
   "exclude": [
     "node_modules"
   ]

@@ -11,15 +11,17 @@ export function NewOnlineGame() {
 
 export function NewOfflineGame(user_id, level) {
 
-    const db = new Database("model/EqualityMastermindDB.db", { verbose: console.log })
+    const db = new Database("model/EqualityMastermindDB.db")
 
     let equations = db.prepare(`SELECT * FROM Equations WHERE level <= ? AND ? - 6 <= level`).all(level, level)
 
     const randomEq = equations[Math.floor(Math.random() * equations.length)]
 
-    db.prepare(`INSERT INTO Offline_Games (user_id, equation_id) VALUES (?, ?)`).run(user_id, randomEq.eq_id)
+    let equation = randomEq.equation
+
+    db.prepare(`INSERT INTO Offline_Games (user_id, equation) VALUES (?, ?)`).run(user_id, equation)
 
     db.close()
 
-    return { ok: true }
+    return equation
 }

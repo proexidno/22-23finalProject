@@ -1,31 +1,21 @@
 "use client";
 import { Input } from "components/ui/input"
 import { Button } from "components/ui/button"
-import { useEffect, useRef } from "react";
-
-
+import { useEffect, useRef, useState } from "react";
+import { useToast } from "components/ui/use-toast";
 
 export default function Page({ params }) {
-    useEffect(() => {
-        const f = async () => {
-            const response = await fetch(`http://localhost:3000/games/${params.gameId}/startgame`, {
-                "method": 'POST',
-                "body": JSON.stringify({ ok: false, game_id: params.gameId }),
-                "cache": "no-store"
-            })
-            const res = await response.json()
-            return res
-        }
-        f().then(console.log)
-    }, [])
 
     const inputRef = useRef("");
+    const [equation, setEquation] = useState("")
+    const [time, setTime] = useState(0)
+    const timeRef = useRef(time)
+    const { toast } = useToast()
 
     function checkIfValid(eq) {
         eq = eq.replaceAll("! ", "factorial");
         eq = eq.replaceAll(" ", "");
         eq = eq.replaceAll("factorial", "! ");
-        console.log(eq);
 
 
         let bracets = 0
@@ -86,26 +76,78 @@ export default function Page({ params }) {
             console.log(7);
             return false
         }
-        console.log(true);
+
         return true
     }
 
-    async function sendMathEq() {
-        if (checkIfValid(inputRef.current)) {
-            let equation = inputRef.current
-            let res = await fetch("http://localhost:3000/api/eqChecker/", {
-                "method": "POST",
-                body: JSON.stringify({ equation }),
-                "cache": 'no-store',
-                "headers": { "Content-Type": "application/json" },
+    useEffect(() => {
+
+        async function resumegame() {
+            const response = await fetch(`http://localhost:3000/api/games/startgame`, {
+                "method": 'POST',
+                "body": JSON.stringify({ gameId: params.gameId }),
+                "next": { revalidate: 300 }
             })
-            console.log(await res.json());
+            const res = await response.json()
+            return res
+        }
+        let timerInterval;
+        resumegame().then(e => {
+            if (e.error) {
+                console.log(e.error);
+            }
+            setEquation(e.equation)
+            setTime(e.time_before_left ? e.time_before_left : 0)
+            timerInterval = setInterval(() => {
+                if (isNaN(timeRef.current)) {
+                    clearInterval(timerInterval)
+                    return;
+                }
+                setTime(prevTime => {
+                    timeRef.current = prevTime
+                    return ++prevTime
+                })
+            }, 100)
+        })
+
+        return async () => {
+            clearInterval(timerInterval)
+            fetch(`http://localhost:3000/api/games/endgame`, {
+                "method": 'POST',
+                "body": JSON.stringify({ reason: "Left the game", gameId: params.gameId, time_before_left: timeRef.current, equation: inputRef.current }),
+                "cache": "no-store"
+            })
+        }
+    }, [])
+
+    async function sendMathEq() {
+        if (checkIfValid(inputRef.current) && !isNaN(timeRef.current)) {
+            const response = await fetch(`http://localhost:3000/api/games/endgame`, {
+                "method": 'POST',
+                "body": JSON.stringify({ reason: "Answered", gameId: params.gameId, time_before_left: timeRef.current, equation: inputRef.current }),
+                "cache": "no-store"
+            })
+            const { right, time_before_sent } = await response.json()
+            if (right) {
+                timeRef.current = NaN
+                setTime(time_before_sent)
+            } else {
+                toast({
+                    title: "Error",
+                    description: "Your equation is wrong or it isn't simlar to given",
+                })
+            }
         }
     }
 
     return (
         <div className="border-2 rounded-xl h-96 grid items-center relative">
+            {isNaN(timeRef.current) ? "" : "hidden"}
             <div className="mx-8">
+                <h1>{isNaN(time) ? "" : (time / 10).toFixed(1)}</h1>
+                <p className="m-8 text-xl font-bold text-center">
+                    {equation}
+                </p>
                 <Input onChange={e => {
                     inputRef.current = e.target.value
                 }} placeholder="Yout mathematical equation" />

@@ -1,5 +1,7 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+import CheckIfUserValid from "model/checkifuservalid";
+
 
 export const authOptions = {
     providers: [
@@ -12,16 +14,11 @@ export const authOptions = {
             async authorize(credentials, req) {
                 const { login, password } = credentials
 
-                const res = await fetch("http://localhost:3000/api/dbmanager/checkifuserexists", {
-                    "method": 'POST',
-                    "cache": 'no-store',
-                    "body": JSON.stringify({ login, password }),
-                    headers: { "Content-Type": "application/json" },
-                })
+                const res = CheckIfUserValid(login, password)
 
-                const user = await res.json()
+                const { user } = res
 
-                if (res.ok && user && !user.error) {
+                if (!res.error && res.ok && user) {
                     return user
                 } else {
                     return null

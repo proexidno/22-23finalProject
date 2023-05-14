@@ -1,5 +1,5 @@
 "use client"
-
+import Link from "next/link";
 import { useSession } from "next-auth/react"
 
 export default function Home() {
@@ -14,10 +14,10 @@ export default function Home() {
           <h1>Play Online</h1>
           <p>Play online versus another player. How will be the first one to complete the quality?</p>
         </div>
-        <div className="games-provider p-9 bg-gray-500">
+        <Link className="games-provider p-9 bg-gray-500" href="/games/offline">
           <h1>Play offline</h1>
           <p></p>
-        </div>
+        </Link>
         <div className="games-provider p-9 bg-gray-400">
           <h1>Play daily</h1>
           <p></p>

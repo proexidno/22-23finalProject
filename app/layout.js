@@ -1,6 +1,7 @@
 "use client";
 import './globals.css'
 import { SessionProvider } from "next-auth/react"
+import { Toaster } from "components/ui/toaster.js"
 
 export const metadata = {
   title: 'Equality Mastermind',
@@ -14,6 +15,7 @@ export default function RootLayout({ children, session }) {
         <SessionProvider session={session}>
           {children}
         </SessionProvider>
+        <Toaster />
       </body>
     </html>
   )
