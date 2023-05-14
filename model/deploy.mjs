@@ -1,5 +1,5 @@
 import Database from "better-sqlite3";
-import registerNewUser from "./makenewuser.mjs"
+import RegisterNewUser from "./makenewuser.mjs"
 import newEq from "./neweq.mjs";
 
 export default function deploy() {
@@ -53,7 +53,7 @@ export default function deploy() {
         equation STRING NOT NULL,
         level INTEGER NOT NULL)`).run()
 
-    registerNewUser("admin123", "1234", "example@gmail.com");
+    RegisterNewUser("admin123", "1234", "example@gmail.com");
 
     newEq("_==0", 0);
     newEq("2+_==4", 1);

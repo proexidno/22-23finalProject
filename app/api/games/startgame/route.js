@@ -1,6 +1,6 @@
 import { CheckIfOnlineGameExists, NewGameId, CheckIfOfflineGameExists } from "model/checkifgameexists"
 import { getServerSession } from "next-auth"
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { authOptions } from "app/api/auth/[...nextauth]/route";
 import { NewOfflineGame } from "model/newgame"
 
@@ -20,7 +20,7 @@ export async function POST(req, { params }) {
         if (CheckIfOfflineGameExists(user.id)) {
             return NextResponse.json(CheckIfOfflineGameExists(user.id))
         }
-        const equation = NewOfflineGame(user.id, user.level)
+        const equation = NewOfflineGame(user.id)
         return NextResponse.json({ equation })
     }
 

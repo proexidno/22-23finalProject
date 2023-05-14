@@ -14,6 +14,7 @@ export async function POST(req) {
     }
 
     const { user } = res
+
     if (gameId === "offline") {
         const answer = CheckEquation(equation)
         if (reason === "Left the game") {

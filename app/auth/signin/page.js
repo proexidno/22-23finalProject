@@ -2,13 +2,11 @@
 import React, { useRef } from 'react'
 import Link from 'next/link'
 import { signIn } from 'next-auth/react';
-import { useToast } from "components/ui/use-toast"
 
 export default function SignIn() {
 
     const login = useRef('')
     const password = useRef('')
-    const { toast } = useToast()
 
     async function handleSubmit(event) {
         event.preventDefault()

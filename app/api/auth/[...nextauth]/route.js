@@ -17,7 +17,7 @@ export const authOptions = {
                 const res = CheckIfUserValid(login, password)
 
                 const { user } = res
-
+                
                 if (!res.error && res.ok && user) {
                     return user
                 } else {

@@ -56,13 +56,14 @@ export function EndOfflineGame(user_id, time, equation) {
 const experience = [1, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 7, 10]
 
 function GainExperience(type, user_id) {
-    
+
     const db = new Database("model/EqualityMastermindDB.db")
 
     if (type === "offline") {
         let { level, progression, max_progression } = db.prepare(`SELECT level, progression, max_progression FROM Offline_Statistics WHERE user_id = ?`).get(user_id)
         progression++
         if (progression >= max_progression) {
+            level++
             progression = 0
             max_progression = experience[level]
         }

@@ -1,11 +1,37 @@
 "use client"
 import Link from "next/link";
 import { useSession } from "next-auth/react"
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  
+
   const { data: session } = useSession()
   const user = session?.user;
+
+  const [userLevel, setUserLevel] = useState(null)
+  const [userpPogression, setUserpPogression] = useState(null)
+  const [userpMaxPogression, setUserpMaxPogression] = useState(null)
+
+  useEffect(() => {
+    async function fetchUserData() {
+      const userOfflineAndOnlineData = await fetch("http://localhost:3000/api/getuserglobaldata", {
+        "method": 'POST',
+        "body": JSON.stringify({ user_id: user?.id }),
+        "next": { revalidate: 300 }
+      })
+      return await userOfflineAndOnlineData.json()
+    }
+    
+    if (user) {
+      fetchUserData().then(e => {
+        setUserLevel(e.level)
+        setUserpPogression(e.progression)
+        setUserpMaxPogression(e.max_progression)
+      })
+    }
+
+
+  }, [user])
 
   return (
     <>
@@ -25,10 +51,10 @@ export default function Home() {
       </div>
       <div className="level-container border-4 rounded-xl border-gray-300 overflow-hidden mt-6 h-40 p-6">
         <h1>
-          Your level is {user?.level}
+          Your level is { userLevel }
         </h1>
         <p>
-          Your progress is {user?.progression} out of {user?.max_progression}
+          Your progress is { userpPogression } out of { userpMaxPogression }
         </p>
       </div>
     </>

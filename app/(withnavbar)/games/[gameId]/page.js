@@ -97,6 +97,7 @@ export default function Page({ params }) {
                 console.log(e.error);
             }
             setEquation(e.equation)
+            document.querySelector("#eqinput").value = e.equation
             setTime(e.time_before_left ? e.time_before_left : 0)
             timerInterval = setInterval(() => {
                 if (isNaN(timeRef.current)) {
@@ -142,13 +143,13 @@ export default function Page({ params }) {
 
     return (
         <div className="border-2 rounded-xl h-96 grid items-center relative">
-            {isNaN(timeRef.current) ? "" : "hidden"}
+            {isNaN(timeRef.current) ? "hidden" : ""}
             <div className="mx-8">
                 <h1>{isNaN(time) ? "" : (time / 10).toFixed(1)}</h1>
                 <p className="m-8 text-xl font-bold text-center">
                     {equation}
                 </p>
-                <Input onChange={e => {
+                <Input id="eqinput" onChange={e => {
                     inputRef.current = e.target.value
                 }} placeholder="Yout mathematical equation" />
             </div>
