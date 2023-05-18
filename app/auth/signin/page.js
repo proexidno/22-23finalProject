@@ -20,9 +20,9 @@ export default function SignIn() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="grid min-h-screen place-content-center">
 
-            <div className="max-w-md w-full px-8 py-6 rounded shadow-lg bg-white">
+            <div className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-screen sm:w-128">
                 <div className="text-gray-800 text-2xl font-medium mb-6">Sign In to Your Account</div>
 
                 <form onSubmit={handleSubmit}>
@@ -53,16 +53,20 @@ export default function SignIn() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                        <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            type="submit"
-                        >
-                            Sign In
-                        </button>
+                        <span className='flex justify-between'>
+                            <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="submit"
+                            >
+                                Sign In
+                            </button>
 
-                        <Link href="/" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
-                            Forgot Password?
-                        </Link>
+                            <Link href="/" className="ml-2 text-gray-500 hover:text-blue-800 py-2 font-medium">
+                                Forgot Password?
+                            </Link>
+                        </span>
+
+                        <Link href="/auth/signup" className='ml-2 text-gray-500 hover:text-blue-800 font-semibold'>Don't have an account?</Link>
                     </div>
                 </form>
             </div>

@@ -3,9 +3,9 @@ import Database from "better-sqlite3";
 export function UpdateOfflineGame(user_id, time, equation) {
 
     const db = new Database("model/EqualityMastermindDB.db")
-
+    console.log(db.prepare(`SELECT equation FROM Offline_Games WHERE user_id = ? AND time IS NULL`).get(user_id));
     const { equation: originalEquation } = db.prepare(`SELECT equation FROM Offline_Games WHERE user_id = ? AND time IS NULL`).get(user_id)
-    const isEquationSimilarToOriginal = equation.match(new RegExp(`^${originalEquation.replaceAll("_", "[()a-zA-Z0-9,.\\-+^*/ !]+")}$`))
+    const isEquationSimilarToOriginal = equation.match(new RegExp(`^${originalEquation.replaceAll(/[+*()]/g, str => `\\${str}`).replaceAll("_", "[()a-zA-Z0-9,.\\-+^*/ !]+")}$`))
 
 
     if (isEquationSimilarToOriginal) {
@@ -35,7 +35,7 @@ export function EndOfflineGame(user_id, time, equation) {
     } else {
 
         const { equation: originalEquation } = db.prepare(`SELECT equation FROM Offline_Games WHERE user_id = ? AND time IS NULL`).get(user_id)
-        const isEquationSimilarToOriginal = equation.match(new RegExp(`^${originalEquation.replaceAll("_", "[()a-zA-Z0-9,.\\-+^*/ !]+")}$`))
+        const isEquationSimilarToOriginal = equation.match(new RegExp(`^${originalEquation.replaceAll(/[+*()]/g, str => `\\${str}`).replaceAll("_", "[()a-zA-Z0-9,.\\-+^*/ !]+")}$`))
 
 
         if (isEquationSimilarToOriginal) {

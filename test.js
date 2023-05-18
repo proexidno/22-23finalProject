@@ -1,0 +1,1 @@
+console.log("_\+(-2)==0".replaceAll(/[+*()]/g, str => `\\${str}`));

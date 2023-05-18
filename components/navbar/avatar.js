@@ -5,26 +5,30 @@ import { useRouter } from "next/navigation";
 
 export function Avatar() {
 
-    const router = useRouter() 
+    const router = useRouter()
     function signUp() {
         router.push("http://localhost:3000/auth/signup")
     }
     const { data } = useSession()
 
     return (
-        <div className="flex justify-center md:justify-end [&>*]:px-3s py-2 box-content">
+        <div className="grid place-content-center md:place-content-end gap-3 box-content grid-rows-1 grid-flow-col lg:py-2 md:py-0 py-0">
             {
-                data?.user ? <Button>
-                    <a href="http://localhost:3000/api/auth/signout">Sign Out</a>
-                </Button> : (
-                    <>
-                        <Button onClick={signUp}>
-                            Sign up
+                data?.user ?
+                    (
+                        <Button>
+                            <a href="/api/auth/signout">Sign Out</a>
                         </Button>
-                        <Button onClick={signIn}>
-                            Sign In
-                        </Button>
-                    </>)
+                    ) : (
+                        <>
+                            <Button onClick={signUp}>
+                                Sign up
+                            </Button>
+                            <Button onClick={signIn}>
+                                Sign In
+                            </Button>
+                        </>
+                    )
             }
         </div>
     )
