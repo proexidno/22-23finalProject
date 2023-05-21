@@ -8,6 +8,6 @@ export default function newEq(eq, level) {
 
     db.close();
     
-    return { "ok": true }
+    return true
 
 }

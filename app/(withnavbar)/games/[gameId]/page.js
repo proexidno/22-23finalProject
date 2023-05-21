@@ -3,76 +3,8 @@ import { Input } from "components/ui/input"
 import { Button } from "components/ui/button"
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "components/ui/use-toast";
-import { evaluate } from "mathjs"
+import CheckEquation from "model/eqchecker";
 
-function doSum(str) {
-    let splited = []
-    let prevcoma = 0
-    let i = 0
-
-    while (splited.length < 3) {
-        if (str[i] === ",") {
-            splited.push(str.slice(prevcoma, i))
-            prevcoma = i + 1
-        } else if (str[i] === "(") {
-            let bracets = 1
-            while (bracets > 0) {
-                i++
-                if (str[i] === "(") bracets++
-                else if (str[i] === ")") bracets--
-            }
-        }
-        i++
-    }
-    splited.push(str.slice(prevcoma))
-
-    const rino = splited.map(e => equationCollector(e))
-    let answ = "("
-    for (let ind = Number(rino[1]); ind <= Number(rino[2]); ind++) {
-        answ += rino[3].replaceAll(rino[0], String(ind)) + "+"
-    }
-
-    answ = answ.slice(0, -1) + ")"
-
-    return answ
-}
-
-function equationCollector(equation) {
-    if (equation.includes("sum(")) {
-        const exec = equation.indexOf("sum(")
-        let i = exec + 3
-        let bracets = 1
-        while (bracets > 0 && equation[i + 1] !== undefined) {
-            i++
-            if (equation[i] === "(") bracets++
-            else if (equation[i] === ")") bracets--
-        }
-
-        const didSum = doSum(equation.slice(exec + 4, i))
-        try {
-            if (didSum.match(/[a-zA-Z]/)) {
-                return equation.slice(0, exec) + didSum + equation.slice(i + 1)
-            }
-            return evaluate(equation.slice(0, exec) + didSum + equation.slice(i + 1))
-        } catch (err) {
-            return equation.slice(0, exec) + didSum + equation.slice(i + 1)
-        }
-
-    }
-
-
-    try {
-        equation = equation.replaceAll("sqrt(", "$#$#$")
-        if (equation.match(/[a-zA-Z]/)) {
-            equation = equation.replaceAll("$#$#$", "sqrt(")
-            return equation
-        }
-        equation = equation.replaceAll("$#$#$", "sqrt(")
-        return evaluate(equation)
-    } catch (err) {
-        return equation
-    }
-}
 
 export default function Page({ params }) {
 
@@ -110,12 +42,16 @@ export default function Page({ params }) {
         let set = new Set(eq)
         const signs = ["+", "-", "*", "^", "/", "=", ">", "<", "!", "(", ")"]
         for (let i of set) {
-            if (i.match(/\d|\s/)) {
-                continue
-            }
-            if (signs.includes(i)) {
-                continue
-            }
+            if (i.match(/\d|\s/)) continue
+
+            if (signs.includes(i)) continue
+
+            if (eq.includes(`sum(${i}`)) continue
+
+            if ("sqrtum".includes(i) && (eq.includes("sqrt(") || eq.includes("sum("))) continue
+
+            if (i === "," && eq.includes("sum(")) continue
+            
             console.log(i);
             console.log(3);
             return false
@@ -208,6 +144,7 @@ export default function Page({ params }) {
                 title: "Error",
                 description: "There's typing error in your equation",
             })
+
             timeRef.current = time
             return;
         }
@@ -219,31 +156,42 @@ export default function Page({ params }) {
                 title: "Error",
                 description: "Your equation isn't simlar to given",
             })
+
             timeRef.current = time
             return;
         }
 
-        const eqationAnswer = equationCollector(inputRef.current)
+        const eqationAnswer = CheckEquation(inputRef.current)
 
-        if (!eqationAnswer || typeof eqationAnswer !== "boolean") {
+        if (!eqationAnswer) {
             toast({
                 title: "Error",
                 description: "Your equation is wrong or it isn't the equation",
             })
+
             timeRef.current = time
             return;
         }
-        
+
         const response = await fetch(`http://localhost:3000/api/games/endgame`, {
             "method": 'POST',
             "body": JSON.stringify({ reason: "Answered", gameId: params.gameId, time_before_left: time, equation: inputRef.current }),
             "cache": "no-store"
         })
         const res = await response.json()
-        if (res?.right) {
-            timeRef.current = NaN
-            setTime((prev) => res?.time_before_sent == prev ? prev - 1 : res.time_before_sent)
+
+        if (!res?.right) {
+            toast({
+                title: "Error",
+                description: "Something's gone wrong on the server",
+            })
+
+            timeRef.current = time
+            return;
         }
+
+        timeRef.current = NaN
+        setTime((prev) => res?.time_before_sent == prev ? prev - 1 : res.time_before_sent)
     }
 
     return (

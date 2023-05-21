@@ -20,56 +20,53 @@ export default function SignIn() {
     }
 
     return (
-        <div className="grid min-h-screen place-content-center">
+        <>
+            <div className="text-gray-800 text-2xl font-medium mb-6">Sign In to Your Account</div>
 
-            <div className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 w-screen sm:w-128">
-                <div className="text-gray-800 text-2xl font-medium mb-6">Sign In to Your Account</div>
+            <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                    <label className="block text-gray-700 font-bold mb-2" htmlFor="username">
+                        Username
+                    </label>
+                    <input
+                        className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="username"
+                        type="text"
+                        placeholder="Enter your username"
+                        onChange={(e) => login.current = e.target.value}
+                    />
+                </div>
 
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 font-bold mb-2" htmlFor="username">
-                            Username
-                        </label>
-                        <input
-                            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="username"
-                            type="text"
-                            placeholder="Enter your username"
-                            onChange={(e) => login.current = e.target.value}
-                        />
-                    </div>
+                <div className="mb-6">
+                    <label className="block text-gray-700 font-bold mb-2" htmlFor="password">
+                        Password
+                    </label>
+                    <input
+                        className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="password"
+                        type="password"
+                        placeholder="Enter your password"
+                        onChange={(e) => password.current = e.target.value}
+                    />
+                </div>
 
-                    <div className="mb-6">
-                        <label className="block text-gray-700 font-bold mb-2" htmlFor="password">
-                            Password
-                        </label>
-                        <input
-                            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="password"
-                            type="password"
-                            placeholder="Enter your password"
-                            onChange={(e) => password.current = e.target.value}
-                        />
-                    </div>
+                <div className="flex items-center justify-between">
+                    <span className='flex justify-between'>
+                        <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="submit"
+                        >
+                            Sign In
+                        </button>
 
-                    <div className="flex items-center justify-between">
-                        <span className='flex justify-between'>
-                            <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                type="submit"
-                            >
-                                Sign In
-                            </button>
+                        <Link href="/" className="ml-2 text-gray-500 hover:text-blue-800 py-2 font-medium">
+                            Forgot Password?
+                        </Link>
+                    </span>
 
-                            <Link href="/" className="ml-2 text-gray-500 hover:text-blue-800 py-2 font-medium">
-                                Forgot Password?
-                            </Link>
-                        </span>
-
-                        <Link href="/auth/signup" className='ml-2 text-gray-500 hover:text-blue-800 font-semibold'>Don't have an account?</Link>
-                    </div>
-                </form>
-            </div>
-        </div>
+                    <Link href="/auth/signup" className='ml-2 text-gray-500 hover:text-blue-800 font-semibold'>Don't have an account?</Link>
+                </div>
+            </form>
+        </>
     )
 }

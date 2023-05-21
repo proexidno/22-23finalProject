@@ -3,11 +3,12 @@ import Database from "better-sqlite3";
 export default function RegisterNewUser(login, password, email) {
 
         const db = new Database("model/EqualityMastermindDB.db", { verbose: console.log })
-
+        
         const newId = db.prepare(`SELECT COUNT(*) + 1 as count FROM Users`).get().count
         try {
                 db.prepare(`INSERT INTO Users (id, login, email, password) Values (?, ?, ?, ?)`).run(newId, login, email, password)
         } catch (SqliteError) {
+                console.log(SqliteError);
                 if (SqliteError.code === "SQLITE_CONSTRAINT_UNIQUE") return { ok: false, error: "User with this login or email   already exists" }
         }
 
@@ -17,5 +18,5 @@ export default function RegisterNewUser(login, password, email) {
 
         db.close()
 
-        return { ok: true }
+        return true
 }

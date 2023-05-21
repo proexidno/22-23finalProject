@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 import { authOptions } from "app/api/auth/[...nextauth]/route";
 import { NewOfflineGame } from "model/newgame"
 
-export async function POST(req, { params }) {
+export async function POST(req) {
 
     const res = await getServerSession(authOptions)
 
