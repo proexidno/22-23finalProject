@@ -1,16 +1,20 @@
 import Database from "better-sqlite3";
+import Base64 from 'crypto-js/enc-base64.js';
+import hmacSHA256 from "crypto-js/sha256.js";
 
-export default function CheckIfUserValid(login, password) {
+export default function CheckIfUserValid(login, inputPassword) {
 
     const db = new Database("model/EqualityMastermindDB.db")
 
-    const isInDB = db.prepare(`SELECT password FROM Users WHERE login = ?`).get(login)
+    const { password, salt } = db.prepare(`SELECT password, salt FROM Users WHERE login = ? OR email = ?`).get(login, login)
 
-    if (!isInDB) {
+    if (!password || !salt) {
         return { error: "User does not exists" }
     }
 
-    if (isInDB.password != password) {
+    const passwordHash = Base64.stringify(hmacSHA256(inputPassword, salt))
+
+    if (passwordHash !== password) {
         return { error: "Wrong credentials" }
     }
 

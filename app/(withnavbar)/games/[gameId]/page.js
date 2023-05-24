@@ -51,7 +51,7 @@ export default function Page({ params }) {
             if ("sqrtum".includes(i) && (eq.includes("sqrt(") || eq.includes("sum("))) continue
 
             if (i === "," && eq.includes("sum(")) continue
-            
+
             console.log(i);
             console.log(3);
             return false
@@ -134,7 +134,7 @@ export default function Page({ params }) {
     }, [])
 
     async function CheckMathEq() {
-        if (timeRef.current === -1) {
+        if (timeRef.current === -1 || isNaN(timeRef.current)) {
             return ""
         }
 
@@ -172,7 +172,7 @@ export default function Page({ params }) {
             timeRef.current = time
             return;
         }
-
+        
         const response = await fetch(`http://localhost:3000/api/games/endgame`, {
             "method": 'POST',
             "body": JSON.stringify({ reason: "Answered", gameId: params.gameId, time_before_left: time, equation: inputRef.current }),

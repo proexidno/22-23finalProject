@@ -17,9 +17,9 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchUserData() {
-      const userOfflineAndOnlineData = await fetch("http://localhost:3000/api/getuserglobaldata", {
+      const userOfflineAndOnlineData = await fetch("http://localhost:3000/api/getglobaldata", {
         "method": 'POST',
-        "body": JSON.stringify({ user_id: user?.id }),
+        "body": JSON.stringify({ user_id: user?.id, user: true, docs: true }),
         "next": { revalidate: 300 }
       })
       return await userOfflineAndOnlineData.json()
@@ -32,20 +32,18 @@ export default function Home() {
         "next": { revalidate: 604800 }
       })
       const res = await userOfflineAndOnlineData.json()
-
+      
       return res.docs
     }
 
     if (user) {
       fetchUserData().then(e => {
+        console.log(e);
         setUserLevel(e.level);
         setUserpPogression(e.progression);
         setUserpMaxPogression(e.max_progression);
-        fetchDocumentation(e.level).then(elem => {
-          const { title, description } = elem
-          setDocumentationTitle(title);
-          setDocumentationDescription(description);
-        })
+        setDocumentationTitle(e.title);
+        setDocumentationDescription(e.description);
       })
     }
 
@@ -76,7 +74,7 @@ export default function Home() {
           <p>
             Your progress is {userpPogression} out of {userpMaxPogression}
           </p>
-          <Progress value={(userpPogression / userpMaxPogression).toFixed(2) * 100} className="w-1/3" />
+          <Progress value={(userpPogression / userpMaxPogression).toFixed(2) * 100} className="w-1/2 caret-gray-200" />
         </div> :
         <></>
       }
