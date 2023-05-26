@@ -51,7 +51,8 @@ export default function Home() {
   }, [user])
 
   return (
-    <>
+    
+    <main className='pt-48 md:pt-20 lg:pt-24 lg:w-256 mx-auto'>
       <div className="grid md:grid-rows-1 md:grid-cols-3 grid-rows-3 grid-cols-1 border-8 rounded-xl border-gray-300 overflow-hidden">
         <div className="games-provider p-9 bg-gray-400">
           <h1>Play Online</h1>
@@ -87,6 +88,6 @@ export default function Home() {
         </div> :
         <></>
       }
-    </>
+      </main>
   )
 }

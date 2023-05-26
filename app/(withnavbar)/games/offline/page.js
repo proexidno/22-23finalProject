@@ -172,7 +172,7 @@ export default function Page({ params }) {
             timeRef.current = time
             return;
         }
-        
+
         const response = await fetch(`http://localhost:3000/api/games/endgame`, {
             "method": 'POST',
             "body": JSON.stringify({ reason: "Answered", gameId: params.gameId, time_before_left: time, equation: inputRef.current }),
@@ -195,20 +195,22 @@ export default function Page({ params }) {
     }
 
     return (
-        <div className="border-2 rounded-xl h-96 grid items-center relative">
-            <div className="mx-8">
-                <div className={isNaN(timeRef.current) ? "" : "hidden"}>You won</div>
-                <h1>{(time / 10).toFixed(1)}</h1>
-                <p className="m-8 text-xl font-bold text-center">
-                    {equation}
-                </p>
-                <Input id="eqinput" onChange={e => {
-                    inputRef.current = e.target.value
-                }} placeholder="Yout mathematical equation" />
+        <main className=' pt-48 md:pt-20 lg:pt-24 lg:w-256 mx-auto'>
+            <div className="border-2 rounded-xl h-96 grid items-center relative">
+                <div className="mx-8">
+                    <div className={isNaN(timeRef.current) ? "" : "hidden"}>You won</div>
+                    <h1>{(time / 10).toFixed(1)}</h1>
+                    <p className="m-8 text-xl font-bold text-center">
+                        {equation}
+                    </p>
+                    <Input id="eqinput" onChange={e => {
+                        inputRef.current = e.target.value
+                    }} placeholder="Yout mathematical equation" />
+                </div>
+                <div className="absolute bottom-4 right-8">
+                    <Button onClick={CheckMathEq}>Send</Button>
+                </div>
             </div>
-            <div className="absolute bottom-4 right-8">
-                <Button onClick={CheckMathEq}>Send</Button>
-            </div>
-        </div>
+        </main>
     )
 }

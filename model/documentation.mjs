@@ -1,6 +1,7 @@
 
 let Docs = [
     {
+        id: `zero-and-equals-to`,
         title: `0 and ==`,
         short_description: `Zero (0) is a special number that represents the absence or lack of quantity. It serves as the additive identity, meaning that when you add 0 to any number, the result is that same number. For example, 3 + 0 equals 3. Similarly, when you subtract 0 from a number, the number remains unchanged. For instance, 7 - 0 equals 7. Zero also has unique properties when multiplied or divided. When you multiply any number by 0, the result is always 0. For example, 5 * 0 equals 0. However, division by 0 is undefined in standard arithmetic since it leads to mathematical inconsistencies.
 
@@ -20,6 +21,7 @@ let Docs = [
         Understanding the properties and implications of 0 and the equals sign is essential for performing mathematical operations, solving equations, and establishing mathematical relationships.`,
     },
     {
+        id: `number-one-five`,
         title: `Numbers 1, 2, 3, 4 and 5`,
         short_description: `1: The smallest positive whole number and multiplicative identity. Often used for counting and as the basis for number systems.
 
@@ -59,6 +61,7 @@ let Docs = [
         In arithmetic, five plays a role in operations like addition, subtraction, multiplication, and division. For instance, 5 - 2 equals 3 or 5 * 4 equals 20.`,
     },
     {
+        id: `numbers-six-9`,
         title: `Numbers 6, 7, 8 and 9`,
         short_description: `6: An even number obtained by adding 3 and 3 or multiplying 2 and 3. Associated with division into equal parts and multiples of 3.
 
@@ -91,6 +94,7 @@ let Docs = [
         It is also important in division, as numbers divisible by 9 have a special property. When you add the digits of a number divisible by 9, the sum is always 9 or a multiple of 9.`,
     },
     {
+        id: `plus-symbol`,
         title: "Plus Symbol",
         short_description: "In mathematics, the plus symbol (+) represents addition, which is a fundamental arithmetic operation. Addition involves combining two or more numbers to find their sum. When using the plus symbol in numerical addition, you simply place it between the numbers being added. For example, 2 + 3 equals 5. This means that starting with the number 2, you add 3 to it, resulting in a sum of 5. Addition can also involve more than two numbers. For instance, 2 + 3 + 4 equals 9. Here, you add 2 and 3 to get 5, and then add 4 to that sum, resulting in a final answer of 9. The plus symbol is a concise and universal representation of this mathematical operation.",
         description: `In mathematics, the plus symbol (+) is used to represent addition, which is one of the four basic arithmetic operations. Addition is the process of combining two or more numbers to find their sum.
@@ -133,6 +137,7 @@ if (Docs.length !== 13) {
     for (let i = 0; Docs.length < 13; i++) {
         Docs.push(
             {
+                id: ``,
                 title: ``,
                 short_description: ``,
                 description: ``,
