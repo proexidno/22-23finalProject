@@ -75,7 +75,7 @@ export default function Home() {
           <p>
             Your progress is {userpPogression} out of {userpMaxPogression}
           </p>
-          <Progress value={(userpPogression / userpMaxPogression).toFixed(2) * 100} className="w-1/2 caret-gray-200" />
+          <Progress value={(userpPogression / userpMaxPogression).toFixed(2) * 100} className="w-1/2 caret-gray-200 border border-slate-300" />
         </div> :
         <></>
       }
