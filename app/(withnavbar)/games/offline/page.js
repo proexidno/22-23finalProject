@@ -11,6 +11,7 @@ export default function Page({ params }) {
     const inputRef = useRef("");
     const [equation, setEquation] = useState("")
     const [time, setTime] = useState(0)
+    const [unavailableSignsString, setUnavailableSignsString] = useState("")
     const timeRef = useRef(time)
 
     const { toast } = useToast()
@@ -88,6 +89,37 @@ export default function Page({ params }) {
         return true
     }
 
+    function levelChecker(eq) {
+        console.log(eq);
+        if (!unavailableSignsString) {
+            console.log(1);
+            return false
+        }
+
+        if (unavailableSignsString.includes("sum") && eq.includes("sum") || unavailableSignsString.includes("sqrt") && eq.includes("sqrt")) {
+            console.log(2);
+            return false
+        }
+
+        if (unavailableSignsString.includes("<=") && eq.includes("<=") || unavailableSignsString.includes(">=") && eq.includes(">=")) {
+            console.log(3);
+            return false
+        }
+
+        const set = new Set(eq)
+        for (let i of unavailableSignsString) {
+            if ("=<>sumqrt".includes(i)) {
+                continue
+            }
+            if (set.has(i)) {
+                console.log(4, i);
+                return false
+            }
+        }
+
+        return true
+    }
+
     useEffect(() => {
 
         async function resumegame() {
@@ -106,6 +138,7 @@ export default function Page({ params }) {
                 console.log(e.error);
             }
             setEquation(e.equation)
+            setUnavailableSignsString(e.unavailableString)
             document.querySelector("#eqinput").value = e.equation
             setTime(e.time_before_left ? e.time_before_left : 0)
             timerInterval = setInterval(() => {
@@ -136,6 +169,16 @@ export default function Page({ params }) {
     async function CheckMathEq() {
         if (timeRef.current === -1 || isNaN(timeRef.current)) {
             return ""
+        }
+
+        if (!levelChecker(inputRef.current)) {
+            toast({
+                title: "Error",
+                description: "You have an insufficient level for some of written signs",
+            })
+
+            timeRef.current = time
+            return;
         }
 
         timeRef.current = -1

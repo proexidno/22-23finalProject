@@ -38,7 +38,6 @@ export default function Home() {
 
     if (user) {
       fetchUserData().then(e => {
-        console.log(e);
         setUserLevel(e.level);
         setUserpPogression(e.progression);
         setUserpMaxPogression(e.max_progression);

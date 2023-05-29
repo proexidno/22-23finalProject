@@ -20,10 +20,10 @@ export function NewOfflineGame(user_id) {
     const randomEq = equations[Math.floor(Math.random() * equations.length)]
 
     let equation = randomEq.equation
-    
+
     db.prepare(`INSERT INTO Offline_Games (user_id, equation) VALUES (?, ?)`).run(user_id, equation)
 
     db.close()
 
-    return equation
+    return { equation, level }
 }

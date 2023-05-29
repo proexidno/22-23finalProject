@@ -19,6 +19,10 @@ export function CheckIfOfflineGameExists(user_id) {
 
     const db = new Database("model/EqualityMastermindDB.db")
 
+    const level = db.prepare(`
+    SELECT level FROM Offline_Statistics
+    WHERE user_id = ?`).get(user_id)
+
     const Offline = db.prepare(`
     SELECT equation, time_before_left FROM Offline_Games
     WHERE user_id = ? AND time IS NULL
@@ -28,7 +32,11 @@ export function CheckIfOfflineGameExists(user_id) {
         return "Too many offline games"
     }
     if (Offline.length === 1) {
-        return Offline[0]
+        return {
+            equation: Offline[0].equation,
+            time_before_left: Offline[0].time_before_left,
+            level,
+        }
     }
 
     db.close()

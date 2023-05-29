@@ -12,7 +12,7 @@ export function Avatar() {
     const { data } = useSession()
 
     return (
-        <div className="grid place-content-center md:place-content-end gap-3 box-content grid-rows-1 grid-flow-col lg:py-2 md:py-0 py-0">
+        <div className="grid place-content-center md:place-content-end gap-3 box-content grid-rows-1 grid-flow-col lg:py-0 py-0">
             {
                 data?.user ?
                     (
@@ -21,12 +21,16 @@ export function Avatar() {
                         </Button>
                     ) : (
                         <>
-                            <Button onClick={signUp}>
-                                Sign up
-                            </Button>
-                            <Button onClick={signIn}>
-                                Sign In
-                            </Button>
+                            <div className="grid place-content-center">
+                                <Button onClick={signUp}>
+                                    Sign up
+                                </Button>
+                            </div>
+                            <div className="grid place-content-center">
+                                <Button onClick={signIn}>
+                                    Sign in
+                                </Button>
+                            </div>
                         </>
                     )
             }

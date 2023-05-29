@@ -4,35 +4,30 @@ import { NextResponse } from "next/server"
 import { authOptions } from "app/api/auth/[...nextauth]/route";
 import { NewOfflineGame } from "model/newgame"
 
-export async function POST(req) {
+const leveling = ["12345", "6789", "+", "-", "()", "*", "/", "<=>=", "<>", "^", "sqrt", "!", "sum"]
+
+export async function POST() {
 
     const res = await getServerSession(authOptions)
 
-    const { gameId } = await req.json()
-    
     if (!res?.user) {
         return NextResponse.json({ error: "You have to be authorized" })
     }
 
     const { user } = res
 
-    if (gameId === "offline") {
-        if (CheckIfOfflineGameExists(user.id)) {
-            return NextResponse.json(CheckIfOfflineGameExists(user.id))
-        }
-        const equation = NewOfflineGame(user.id)
-        return NextResponse.json({ equation })
+    const offlineGameRawInfo = CheckIfOfflineGameExists(user.id)
+    
+    if (offlineGameRawInfo) {
+        
+        return NextResponse.json({
+            unavailableString: leveling.splice(offlineGameRawInfo.level).join(""),
+            equation: offlineGameRawInfo.equation,
+            time_before_left: offlineGameRawInfo.time_before_left,
+        })
     }
 
-    if (Number(gameId) === NaN) {
-        return NextResponse.json({ ok: false, error: "Incorrect game id" })
-    }
-
-    let gameExists = CheckIfOnlineGameExists(game_id)
-
-    if (!gameExists.ok) {
-        return NextResponse.json({ error: gameExists?.error })
-    }
-
-    return NextResponse.json({ ok: false, error: "Not avaliable" })
+    const { equation, level } = NewOfflineGame(user.id)
+    
+    return NextResponse.json({ equation, unavailableString: leveling.splice(level).join("") })
 }
