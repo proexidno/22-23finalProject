@@ -27,7 +27,7 @@ export default function deploy() {
     db.prepare(`CREATE TABLE IF NOT EXISTS Offline_Statistics (
         id INTEGER PRIMARY KEY,
         user_id INTEGER NOT NULL UNIQUE,
-        level INTEGER NOT NULL DEFAULT 0,
+        level INTEGER NOT NULL DEFAULT 1,
         progression INTEGER NOT NULL DEFAULT 0,
         total_games INTEGER NOT NULL DEFAULT 0,
         max_progression INTEGER NOT NULL DEFAULT 1,

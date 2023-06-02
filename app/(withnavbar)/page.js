@@ -62,9 +62,9 @@ export default function Home() {
             Your level is {globalData.level}
           </h1>
           <p>
-            Your progress is {globalData.progression} out of {globalData.max_progression}
+            Your progress is {globalData.progression} out of {globalData.level >= 13 ? "infinity" : globalData.max_progression}
           </p>
-          <Progress value={(globalData.progression / globalData.max_progression).toFixed(2) * 100} className="w-1/2 caret-gray-200 border border-slate-300" />
+          <Progress value={globalData.level >= 13 ? 100 : (globalData.progression / globalData.max_progression).toFixed(2) * 100} className="w-1/2 caret-gray-200 border border-slate-300" />
 
           <p> You played total of {globalData.total_games} games</p>
         </div> :

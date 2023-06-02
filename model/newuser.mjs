@@ -25,7 +25,7 @@ export default function RegisterNewUser(login, password, email) {
                 db.prepare(`INSERT INTO Users (id, login, email, password, salt) Values (?, ?, ?, ?, ?)`).run(newId, login, email, hashedPassword, salt)
         } catch (SqliteError) {
                 
-                if (SqliteError.code === "SQLITE_CONSTRAINT_UNIQUE") return { ok: false, error: "User with this login or email   already exists" }
+                if (SqliteError.code === "SQLITE_CONSTRAINT_UNIQUE") return { ok: false, error: "User with this login or email already exists" }
         }
 
         db.prepare(`INSERT INTO Online_Statistics (user_id) Values (?)`).run(newId)
@@ -34,5 +34,6 @@ export default function RegisterNewUser(login, password, email) {
 
         db.close()
 
-        return true
+        return { ok: true }
+
 }

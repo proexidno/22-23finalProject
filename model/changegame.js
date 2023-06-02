@@ -55,7 +55,7 @@ export function EndOfflineGame(user_id, time, equation) {
     return false
 }
 
-const experience = [1, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 7, 10]
+const experience = [1, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 7, 10, -1]
 
 function GainExperience(type, user_id) {
 
@@ -63,13 +63,14 @@ function GainExperience(type, user_id) {
     
     if (type === "offline") {
         let { level, progression, max_progression, total_games } = db.prepare(`SELECT level, progression, max_progression, total_games FROM Offline_Statistics WHERE user_id = ?`).get(user_id)
-        
-        progression++
-        total_games++
-        if (progression >= max_progression) {
-            level++
-            progression = 0
-            max_progression = experience[level]
+        if (experience[level] !== -1) {
+            progression++
+            total_games++
+            if (progression >= max_progression) {
+                level++
+                progression = 0
+                max_progression = experience[level]
+            }
         }
         
         db.prepare(`UPDATE Offline_Statistics SET level = ?, progression = ?, max_progression = ?, total_games = ? WHERE user_id = ?`).run(level, progression, max_progression, total_games, user_id)

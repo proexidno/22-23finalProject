@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 import { authOptions } from "app/api/auth/[...nextauth]/route";
 import { NewOfflineGame } from "model/newgame"
 
-const leveling = ["12345", "6789", "+", "-", "()", "*", "/", "<=>=", "<>", "^", "sqrt", "!", "sum"]
+const leveling = ["12345", "6789", "+", "-", "()", "*", "/", "<=>=", "<>", "^", "sqrt", "!", "sum", "&&&"]
 
 export async function POST() {
     const res = await getServerSession(authOptions)

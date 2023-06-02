@@ -35,7 +35,7 @@ export default function Documentation({ className }) {
                             )
                             )}
                         </Accordion>
-                        <Link href="/docs" className="inline-flex items-center justify-center rounded-md text-white bg-black h-10 py-2 px-4">Go to full docs</Link>
+                        <Link href="/docs" className="inline-flex items-center justify-center rounded-md text-white bg-black h-10 py-2 px-4 float-right mt-4">Go to full docs</Link>
                     </SheetDescription>
                 </SheetHeader>
             </SheetContent>
