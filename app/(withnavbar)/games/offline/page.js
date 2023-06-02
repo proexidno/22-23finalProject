@@ -72,6 +72,10 @@ export default function Page({ params }) {
             console.log(0);
             return false
         }
+        
+        if (eq.includes("!=")) {
+            return false
+        }
 
         let bracets = 0
         for (let i of eq) {

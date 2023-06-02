@@ -20,7 +20,7 @@ export default function Documentation({ className }) {
     return (
         <Sheet className="leading-loose">
             <SheetTrigger className={`hover:bg-slate-200 px-4 hover:rounded-3xl ${className}`}>Documentation</SheetTrigger>
-            <SheetContent position={"right"} className="w-1/2 md:w-1/3">
+            <SheetContent position={"right"} className="w-1/2 md:w-1/3 overflow-scroll">
                 <SheetHeader>
                     <SheetTitle className="text-3xl">This is handy Documentation</SheetTitle>
                     <SheetDescription>
@@ -29,7 +29,8 @@ export default function Documentation({ className }) {
                                 <AccordionItem value={`item-${ind + 1}`} key={`item-${ind}`}>
                                     <AccordionTrigger>{elem.title}</AccordionTrigger>
                                     <AccordionContent>
-                                        {elem.short_description}
+                                        <p dangerouslySetInnerHTML={{ __html: elem.short_description.replaceAll("\n", "<br />") }} />
+
                                     </AccordionContent>
                                 </AccordionItem>
                             )
@@ -41,6 +42,6 @@ export default function Documentation({ className }) {
                     </SheetDescription>
                 </SheetHeader>
             </SheetContent>
-        </Sheet>
+        </Sheet >
     )
 }

@@ -62,7 +62,7 @@ export default function Page() {
                 {
                     Documentations.map((elem, ind) => elem.id ? (
                         <Fragment key={elem.id}>
-                            {ind === 0 ? <></> : <hr className="my-14 w-full" id={elem.id} />}
+                            {ind === 0 ? <></> : <hr className="my-20 w-full" id={elem.id} />}
                             <div className={ind === 0 ? "pt-20" : null} id={ind === 0 ? elem.id : null}>
                                 <h1 className="relative right-4 mb-6">{elem.title}</h1>
                                 {
