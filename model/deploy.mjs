@@ -29,6 +29,7 @@ export default function deploy() {
         user_id INTEGER NOT NULL UNIQUE,
         level INTEGER NOT NULL DEFAULT 0,
         progression INTEGER NOT NULL DEFAULT 0,
+        total_games INTEGER NOT NULL DEFAULT 0,
         max_progression INTEGER NOT NULL DEFAULT 1,
         FOREIGN KEY (user_id) REFERENCES Users (id))`).run()
 

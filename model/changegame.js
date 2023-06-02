@@ -61,14 +61,15 @@ function GainExperience(type, user_id) {
     const db = new Database("model/EqualityMastermindDB.db")
 
     if (type === "offline") {
-        let { level, progression, max_progression } = db.prepare(`SELECT level, progression, max_progression FROM Offline_Statistics WHERE user_id = ?`).get(user_id)
+        let { level, progression, max_progression, total_games } = db.prepare(`SELECT level, progression, max_progression, total_games FROM Offline_Statistics WHERE user_id = ?`).get(user_id)
         progression++
+        total_games++
         if (progression >= max_progression) {
             level++
             progression = 0
             max_progression = experience[level]
         }
-        db.prepare(`UPDATE Offline_Statistics SET level = ?, progression = ?, max_progression = ? WHERE user_id = ?`).run(level, progression, max_progression, user_id)
+        db.prepare(`UPDATE Offline_Statistics SET level = ?, progression = ?, max_progression = ?, total_games = ? WHERE user_id = ?`).run(level, progression, max_progression, user_id, total_games)
     }
 
     db.close

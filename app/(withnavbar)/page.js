@@ -9,14 +9,10 @@ export default function Home() {
   const { data: session } = useSession()
   const user = session?.user;
 
-  const [userLevel, setUserLevel] = useState(null)
-  const [userpPogression, setUserpPogression] = useState(null)
-  const [userpMaxPogression, setUserpMaxPogression] = useState(null)
-  const [documentationTitle, setDocumentationTitle] = useState(null)
-  const [documentationDescription, setDocumentationDescription] = useState(null)
+  const [globalData, setGlobalData] = useState(null)
 
   useEffect(() => {
-    async function fetchUserData() {
+    async function fetchGlobalData() {
       const userOfflineAndOnlineData = await fetch("http://localhost:3000/api/getglobaldata", {
         "method": 'POST',
         "body": JSON.stringify({ user_id: user?.id, user: true, docs: true }),
@@ -32,27 +28,21 @@ export default function Home() {
         "next": { revalidate: 604800 }
       })
       const res = await userOfflineAndOnlineData.json()
-      
+
       return res.docs
     }
 
     if (user) {
-      fetchUserData().then(e => {
-        setUserLevel(e.level);
-        setUserpPogression(e.progression);
-        setUserpMaxPogression(e.max_progression);
-        setDocumentationTitle(e.title);
-        setDocumentationDescription(e.description);
-      })
+      fetchGlobalData().then(setGlobalData)
     }
 
 
   }, [user])
 
   return (
-    
+
     <main className='pt-48 md:pt-20 lg:pt-24 lg:w-256 mx-auto'>
-      <div className="grid md:grid-rows-1 md:grid-cols-3 grid-rows-3 grid-cols-1 border-8 rounded-xl border-gray-300 overflow-hidden">
+      <div className="grid md:grid-flow-col grid-rows-1 border-8 rounded-xl border-gray-300 overflow-hidden md:grid-rows-1">
         <div className="games-provider p-9 bg-gray-400">
           <h1>Play Online</h1>
           <p>Play online versus another player. How will be the first one to complete the quality?</p>
@@ -66,27 +56,29 @@ export default function Home() {
           <p>Play daily level and compete on speed with other players.</p>
         </div>
       </div>
-      {userLevel !== null ?
+      {globalData !== null ?
         <div className="level-container border-4 rounded-xl border-gray-300 overflow-hidden mt-6 h-40 p-6">
           <h1>
-            Your level is {userLevel}
+            Your level is {globalData.level}
           </h1>
           <p>
-            Your progress is {userpPogression} out of {userpMaxPogression}
+            Your progress is {globalData.progression} out of {globalData.max_progression}
           </p>
-          <Progress value={(userpPogression / userpMaxPogression).toFixed(2) * 100} className="w-1/2 caret-gray-200 border border-slate-300" />
+          <Progress value={(globalData.progression / globalData.max_progression).toFixed(2) * 100} className="w-1/2 caret-gray-200 border border-slate-300" />
+
+          <p> You played total of {globalData.total_games} games</p>
         </div> :
         <></>
       }
-      {documentationTitle ?
+      {globalData !== null && globalData.title ?
         <div className="level-container border-4 rounded-xl border-gray-300 overflow-hidden mb-8 mt-6 p-6">
           <h1>
-            {documentationTitle}
+            {globalData.title}
           </h1>
-          <p dangerouslySetInnerHTML={{ __html: documentationDescription.replaceAll("\n", "<br />") }} />
+          <p dangerouslySetInnerHTML={{ __html: globalData.description.replaceAll("\n", "<br />") }} />
         </div> :
         <></>
       }
-      </main>
+    </main>
   )
 }

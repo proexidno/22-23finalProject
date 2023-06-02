@@ -1,4 +1,4 @@
-import { Documentations } from "model/Documentation"
+import { Documentations } from "model/documentation"
 import { Fragment } from "react"
 import {
     Sheet,
