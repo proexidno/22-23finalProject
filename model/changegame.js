@@ -11,12 +11,15 @@ export function UpdateOfflineGame(user_id, time, equation) {
     
     if (isEquationSimilarToOriginal) {
 
+        
         db.prepare(`UPDATE Offline_Games SET time = ? WHERE user_id = ? AND time IS NULL`).run(time, user_id)
-
+        
         GainExperience("offline", user_id)
+        
 
         return true
     }
+    
 
     db.close
 
@@ -59,7 +62,7 @@ const experience = [1, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 7, 10]
 function GainExperience(type, user_id) {
 
     const db = new Database("model/EqualityMastermindDB.db")
-
+    
     if (type === "offline") {
         let { level, progression, max_progression, total_games } = db.prepare(`SELECT level, progression, max_progression, total_games FROM Offline_Statistics WHERE user_id = ?`).get(user_id)
         progression++

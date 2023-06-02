@@ -17,7 +17,9 @@ export async function POST(req) {
 
     const answer = CheckEquation(equation)
     if (reason === "Left the game") {
+        
         if (answer) {
+            
             const right = EndOfflineGame(user.id, time_before_left, equation)
             return NextResponse.json({ right })
         }
@@ -29,6 +31,6 @@ export async function POST(req) {
         const right = UpdateOfflineGame(user.id, time_before_left, equation)
         return NextResponse.json({ right, time_before_sent: time_before_left })
     }
-
+    
     return NextResponse.json({ right: false, time_before_sent: time_before_left })
 }

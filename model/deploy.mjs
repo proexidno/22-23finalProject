@@ -67,7 +67,9 @@ export default function deploy() {
     RegisterNewUser("admin123", "1234", "example@gmail.com");
 
     newEq("_==0", 0);
-    newEq("2+_==4", 1);
+    newEq("_==15", 1);
+    newEq("_==23458", 2);
+    newEq("2+_==4", 3);
     newEq("2-2==_", 4);
     newEq("_+(-2)==0", 5);
     newEq("2*_==4", 6);

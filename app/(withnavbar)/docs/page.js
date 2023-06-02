@@ -11,16 +11,16 @@ import {
 import { AiOutlineMenu } from "react-icons/ai"
 
 function NumbersToLists({ str }) {
-        let lis = str.replaceAll(/ {8}/g, "").split(/\d:\n\n/g)
-        lis.shift()
-        return (
-            <ol start={Number(str[0])} className="list-decimal pl-6">
-                {lis.map((e, ind) => (
-                    <li className="mb-4 last:mb-0" key={ind} dangerouslySetInnerHTML={{ __html: e.replaceAll("\n", "<br />") }} />
-                ))}
-            </ol>
-        )
-    }
+    let lis = str.replaceAll(/ {8}/g, "").split(/\d:\n\n/g)
+    lis.shift()
+    return (
+        <ol start={Number(str[0])} className="list-decimal pl-6">
+            {lis.map((e, ind) => (
+                <li className="mb-4 last:mb-0" key={ind} dangerouslySetInnerHTML={{ __html: e.replaceAll("\n", "<br />") }} />
+            ))}
+        </ol>
+    )
+}
 
 function SideBar() {
     return (
@@ -58,7 +58,7 @@ export default function Page() {
             </div>
             <div className="hidden sm:hidden md:hidden lg:block"></div>
             <div className="pl-4 text-base sm:text-lg md:text-lg lg:text-xl mx-8 sm:mx-12 md:mx-10 lg:mx-6 relative">
-                <h1 className="absolute top-2 sm:text-xl md:text-xl lg:text-5xl -left-4">Maths Documentation</h1>
+                <h1 className="absolute top-2 sm:text-xl md:text-xl lg:text-5xl -left-4">Math Documentation</h1>
                 {
                     Documentations.map((elem, ind) => elem.id ? (
                         <Fragment key={elem.id}>

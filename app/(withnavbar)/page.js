@@ -43,7 +43,7 @@ export default function Home() {
 
     <main className='pt-48 md:pt-20 lg:pt-24 lg:w-256 mx-auto'>
       <div className="grid md:grid-flow-col grid-rows-1 border-8 rounded-xl border-gray-300 overflow-hidden md:grid-rows-1">
-        <div className="games-provider p-9 bg-gray-400">
+        <div className="games-provider p-9 bg-gray-400 hidden">
           <h1>Play Online</h1>
           <p>Play online versus another player. How will be the first one to complete the quality?</p>
         </div>
@@ -51,7 +51,7 @@ export default function Home() {
           <h1>Play offline</h1>
           <p>Play offline and upgrade your level and unlock new levels and signs.</p>
         </Link>
-        <div className="games-provider p-9 bg-gray-400">
+        <div className="games-provider p-9 bg-gray-400 hidden">
           <h1>Play daily</h1>
           <p>Play daily level and compete on speed with other players.</p>
         </div>

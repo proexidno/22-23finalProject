@@ -19,7 +19,7 @@ export async function POST() {
     const offlineGameRawInfo = CheckIfOfflineGameExists(user.id)
     
     if (offlineGameRawInfo) {
-        
+        console.log(offlineGameRawInfo.level, 123);
         return NextResponse.json({
             unavailableString: leveling.splice(offlineGameRawInfo.level).join(""),
             equation: offlineGameRawInfo.equation,
