@@ -6,11 +6,9 @@ export function UpdateOfflineGame(user_id, time, equation) {
 
     const { equation: originalEquation } = db.prepare(`SELECT equation FROM Offline_Games WHERE user_id = ? AND time IS NULL`).get(user_id)
 
-    const isEquationSimilarToOriginal = equation.match(new RegExp(`^${originalEquation.replaceAll(/[+*()]/g, str => `\\${str}`).replaceAll("_", "[()a-zA-Z0-9,.\\-+^*/ !]+")}$`))
+    const isEquationSimilarToOriginal = equation.match(new RegExp(`^${originalEquation.replaceAll(/[+*()^]/g, str => `\\${str}`).replaceAll("_", "[()a-zA-Z0-9,.\\-+^*/ !]+")}$`))
 
-    
     if (isEquationSimilarToOriginal) {
-
         
         db.prepare(`UPDATE Offline_Games SET time = ? WHERE user_id = ? AND time IS NULL`).run(time, user_id)
         
@@ -21,7 +19,7 @@ export function UpdateOfflineGame(user_id, time, equation) {
     }
     
 
-    db.close
+    db.close()
 
     return false
 }
@@ -37,9 +35,9 @@ export function EndOfflineGame(user_id, time, equation) {
 
         return false
     } else {
-
+        
         const { equation: originalEquation } = db.prepare(`SELECT equation FROM Offline_Games WHERE user_id = ? AND time IS NULL`).get(user_id)
-        const isEquationSimilarToOriginal = equation.match(new RegExp(`^${originalEquation.replaceAll(/[+*()]/g, str => `\\${str}`).replaceAll("_", "[()a-zA-Z0-9,.\\-+^*/ !]+")}$`))
+        const isEquationSimilarToOriginal = equation.match(new RegExp(`^${originalEquation.replaceAll(/[+*()^]/g, str => `\\${str}`).replaceAll("_", "[()a-zA-Z0-9,.\\-+^*/ !]+")}$`))
 
 
         if (isEquationSimilarToOriginal) {
@@ -52,7 +50,7 @@ export function EndOfflineGame(user_id, time, equation) {
         }
     }
 
-    db.close
+    db.close()
 
     return false
 }
@@ -65,6 +63,7 @@ function GainExperience(type, user_id) {
     
     if (type === "offline") {
         let { level, progression, max_progression, total_games } = db.prepare(`SELECT level, progression, max_progression, total_games FROM Offline_Statistics WHERE user_id = ?`).get(user_id)
+        
         progression++
         total_games++
         if (progression >= max_progression) {
@@ -72,8 +71,9 @@ function GainExperience(type, user_id) {
             progression = 0
             max_progression = experience[level]
         }
-        db.prepare(`UPDATE Offline_Statistics SET level = ?, progression = ?, max_progression = ?, total_games = ? WHERE user_id = ?`).run(level, progression, max_progression, user_id, total_games)
+        
+        db.prepare(`UPDATE Offline_Statistics SET level = ?, progression = ?, max_progression = ?, total_games = ? WHERE user_id = ?`).run(level, progression, max_progression, total_games, user_id)
     }
 
-    db.close
+    db.close()
 }

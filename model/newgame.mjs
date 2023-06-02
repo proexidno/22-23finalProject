@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 
 export function NewOnlineGame() {
 
-    const db = new Database("model/EqualityMastermindDB.db", { verbose: console.log })
+    const db = new Database("model/EqualityMastermindDB.db")
 
     db.close()
 
@@ -15,9 +15,11 @@ export function NewOfflineGame(user_id) {
 
     const { level } = db.prepare(`SELECT level FROM Offline_Statistics WHERE user_id = ?`).get(user_id)
 
-    const equations = db.prepare(`SELECT * FROM Equations WHERE level <= ? OR 13 = ?`).all(level, level)
-
-    const randomEq = equations[Math.floor(Math.random() * equations.length)]
+    const equations = db.prepare(`SELECT * FROM Equations WHERE (level <= ? AND level > ? - 4) OR 13 = ?`).all(level, level, level)
+    
+    const random = Math.random()
+    
+    const randomEq = equations[Math.floor(random * equations.length)]
 
     let equation = randomEq.equation
 

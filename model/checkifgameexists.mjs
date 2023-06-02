@@ -19,7 +19,7 @@ export function CheckIfOfflineGameExists(user_id) {
 
     const db = new Database("model/EqualityMastermindDB.db")
 
-    const level = db.prepare(`
+    const { level } = db.prepare(`
     SELECT level FROM Offline_Statistics
     WHERE user_id = ?`).get(user_id)
 

@@ -6,7 +6,7 @@ import { Documentations } from "./documentation.mjs";
 
 export default function deploy() {
 
-    const db = new Database("model/EqualityMastermindDB.db", { verbose: console.log })
+    const db = new Database("model/EqualityMastermindDB.db")
 
     db.prepare(`CREATE TABLE IF NOT EXISTS Users (
         id INTEGER PRIMARY KEY,
@@ -74,6 +74,7 @@ export default function deploy() {
     newEq("_+(-2)==0", 5);
     newEq("2*_==4", 6);
     newEq("2/2==_", 7);
+    newEq("2/(2+3)>=_", 8);
     newEq("9>_", 9);
     newEq("2^_==4", 10);
     newEq("sqrt(_)==5", 11);

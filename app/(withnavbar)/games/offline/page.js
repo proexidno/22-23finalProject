@@ -5,8 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { useToast } from "components/ui/use-toast";
 import CheckEquation from "model/eqchecker";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-export default function Page({ params }) {
+export default function Page() {
 
     const router = useRouter()
     const inputRef = useRef("");
@@ -22,7 +23,7 @@ export default function Page({ params }) {
         async function resumegame() {
             const response = await fetch(`http://localhost:3000/api/games/startgame`, {
                 "method": 'POST',
-                "body": JSON.stringify({ gameId: params.gameId }),
+                "body": JSON.stringify({}),
                 "next": { revalidate: 300 }
             })
             const res = await response.json()
@@ -32,9 +33,9 @@ export default function Page({ params }) {
         let timerInterval;
         resumegame().then(e => {
             if (e.error) {
-                console.log(e.error);
+
             }
-            console.log(e);
+
             setEquation(e.equation)
             setUnavailableSignsString(e.unavailableString)
             document.querySelector("#eqinput").value = e.equation
@@ -56,9 +57,12 @@ export default function Page({ params }) {
 
         return async () => {
             clearInterval(timerInterval)
+            if (isNaN(timeRef.current)) {
+                return;
+            }
             fetch(`http://localhost:3000/api/games/endgame`, {
                 "method": 'POST',
-                "body": JSON.stringify({ reason: "Left the game", gameId: params.gameId, time_before_left: timeRef.current, equation: inputRef.current }),
+                "body": JSON.stringify({ reason: "Left the game", time_before_left: timeRef.current, equation: inputRef.current }),
                 "cache": "no-store"
             })
         }
@@ -69,10 +73,10 @@ export default function Page({ params }) {
         eq = eq.replaceAll(" ", "");
         eq = eq.replaceAll("factorial", "! ");
         if (eq.includes("_")) {
-            console.log(0);
+
             return false
         }
-        
+
         if (eq.includes("!=")) {
             return false
         }
@@ -80,14 +84,14 @@ export default function Page({ params }) {
         let bracets = 0
         for (let i of eq) {
             if (bracets < 0) {
-                console.log(1);
+
                 return false
             }
             if (i === "(") bracets++
             else if (i === ")") bracets--
         }
         if (bracets !== 0) {
-            console.log(2);
+
             return false
         }
 
@@ -105,21 +109,21 @@ export default function Page({ params }) {
 
             if (i === "," && eq.includes("sum(")) continue
 
-            console.log(i);
-            console.log(3);
+
+
             return false
         }
 
 
         if (eq.match(/\s!/) || eq.startsWith("!")) {
-            console.log(4);
+
             return false
         }
 
 
         for (let i of ["+", "-"]) {
             if (eq.includes(i + ")") || eq.endsWith(i)) {
-                console.log(5);
+
                 return false
             }
         }
@@ -127,14 +131,14 @@ export default function Page({ params }) {
 
         for (let i of ["*", "^", "(", "="]) {
             if (eq.includes(i + ")") || eq.endsWith(i) || eq.startsWith(i)) {
-                console.log(6);
+
                 return false
             }
         }
 
 
         if (eq === "") {
-            console.log(7);
+
             return false
         }
 
@@ -142,19 +146,18 @@ export default function Page({ params }) {
     }
 
     function levelChecker(eq) {
-        console.log(unavailableSignsString);
+
         if (!unavailableSignsString) {
-            console.log(1);
             return false
         }
 
         if (unavailableSignsString.includes("sum") && eq.includes("sum") || unavailableSignsString.includes("sqrt") && eq.includes("sqrt")) {
-            console.log(2);
+
             return false
         }
 
         if (unavailableSignsString.includes("<=") && eq.includes("<=") || unavailableSignsString.includes(">=") && eq.includes(">=")) {
-            console.log(3);
+
             return false
         }
 
@@ -164,7 +167,7 @@ export default function Page({ params }) {
                 continue
             }
             if (set.has(i)) {
-                console.log(4, i);
+
                 return false
             }
         }
@@ -198,8 +201,7 @@ export default function Page({ params }) {
             timeRef.current = time
             return;
         }
-
-        const EqRegexp = new RegExp(`^${equation.replaceAll(/[+*()]/g, str => `\\${str}`).replaceAll("_", "[()a-zA-Z0-9,.\\-+^*/ !]+")}$`)
+        const EqRegexp = new RegExp(`^${equation.replaceAll(/[+*()^]/g, str => `\\${str}`).replaceAll("_", "[()a-zA-Z0-9,.\\-+^*/ !]+")}$`)
         const isEquationSimilarToOriginal = inputRef.current.match(EqRegexp)
 
         if (!isEquationSimilarToOriginal) {
@@ -226,11 +228,11 @@ export default function Page({ params }) {
 
         const response = await fetch(`http://localhost:3000/api/games/endgame`, {
             "method": 'POST',
-            "body": JSON.stringify({ reason: "Answered", gameId: params.gameId, time_before_left: time, equation: inputRef.current }),
+            "body": JSON.stringify({ reason: "Answered", time_before_left: time, equation: inputRef.current }),
             "cache": "no-store"
         })
         const res = await response.json()
-        console.log(res);
+
         if (!res?.right) {
             toast({
                 title: "Error",
@@ -242,7 +244,7 @@ export default function Page({ params }) {
         }
 
         timeRef.current = NaN
-        console.log(timeRef.current);
+
         setTime((prev) => res?.time_before_sent == prev ? prev - 1 : res.time_before_sent)
     }
 
@@ -268,7 +270,7 @@ export default function Page({ params }) {
                 <dialog open={isNaN(timeRef.current) ? true : null} className="bg-white rounded-xl w-96 border-2 px-2">
                     <h1 className="text-center text-xl mt-4">You won!</h1>
                     <div className="grid gap-6 justify-around grid-rows-1 grid-flow-col mt-4">
-                        <Button onClick={() => router.push("http://localhost:3000/")}>Leave to main page</Button>
+                        <Link href="/" className="inline-flex items-center justify-center rounded-md text-white bg-black h-10 py-2 px-4">Leave to main page</Link>
                     </div>
                 </dialog>
             </div>

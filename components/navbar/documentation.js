@@ -14,7 +14,6 @@ import {
 } from "components/ui/accordion"
 import { Documentations } from "model/documentation.mjs";
 import Link from "next/link";
-import { Button } from "components/ui/button"
 
 export default function Documentation({ className }) {
     return (
@@ -36,9 +35,7 @@ export default function Documentation({ className }) {
                             )
                             )}
                         </Accordion>
-                        <Button asChild className="float-right mt-4">
-                            <Link href={"/docs"}>Go to full docs</Link>
-                        </Button>
+                        <Link href="/docs" className="inline-flex items-center justify-center rounded-md text-white bg-black h-10 py-2 px-4">Go to full docs</Link>
                     </SheetDescription>
                 </SheetHeader>
             </SheetContent>

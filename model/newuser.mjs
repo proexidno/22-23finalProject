@@ -13,7 +13,7 @@ function randString(length) {
 
 export default function RegisterNewUser(login, password, email) {
 
-        const db = new Database("model/EqualityMastermindDB.db", { verbose: console.log })
+        const db = new Database("model/EqualityMastermindDB.db")
 
         const salt = randString(32)
 
@@ -24,7 +24,7 @@ export default function RegisterNewUser(login, password, email) {
         try {
                 db.prepare(`INSERT INTO Users (id, login, email, password, salt) Values (?, ?, ?, ?, ?)`).run(newId, login, email, hashedPassword, salt)
         } catch (SqliteError) {
-                console.log(SqliteError);
+                
                 if (SqliteError.code === "SQLITE_CONSTRAINT_UNIQUE") return { ok: false, error: "User with this login or email   already exists" }
         }
 

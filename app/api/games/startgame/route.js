@@ -7,7 +7,6 @@ import { NewOfflineGame } from "model/newgame"
 const leveling = ["12345", "6789", "+", "-", "()", "*", "/", "<=>=", "<>", "^", "sqrt", "!", "sum"]
 
 export async function POST() {
-
     const res = await getServerSession(authOptions)
 
     if (!res?.user) {
@@ -17,17 +16,21 @@ export async function POST() {
     const { user } = res
 
     const offlineGameRawInfo = CheckIfOfflineGameExists(user.id)
-    
+
     if (offlineGameRawInfo) {
-        console.log(offlineGameRawInfo.level, 123);
+
+        const unavailableString = leveling.slice(offlineGameRawInfo.level).join("")
+
         return NextResponse.json({
-            unavailableString: leveling.splice(offlineGameRawInfo.level).join(""),
+            unavailableString,
             equation: offlineGameRawInfo.equation,
             time_before_left: offlineGameRawInfo.time_before_left,
         })
     }
 
     const { equation, level } = NewOfflineGame(user.id)
-    
-    return NextResponse.json({ equation, unavailableString: leveling.splice(level).join("") })
+    return NextResponse.json({
+        equation,
+        unavailableString: leveling.slice(level).join(""),
+    })
 }
